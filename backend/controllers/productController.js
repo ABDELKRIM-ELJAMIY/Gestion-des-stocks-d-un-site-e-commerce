@@ -1,31 +1,24 @@
-const Product = require('../models/productModel'); // Ton modèle de produit
+const Product = require('../models/productModel'); 
 
 // Fonction pour créer un produit
 const createProduct = async (req, res) => {
+    const { title, description, price, stock } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : ""; // Save the path of the uploaded image
+
     try {
-        const { title, description, price, stock, imageUrl } = req.body;
-
-        if (!title || !description || !price || !stock || !imageUrl) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-
         const newProduct = new Product({
             title,
             description,
             price,
             stock,
-            imageUrl
+            imageUrl, // Store the image path in the database
         });
 
         await newProduct.save();
-
-        // Message personnalisé dans la réponse
-        res.status(201).json({
-            message: 'Product created successfully',
-            product: newProduct
-        });
+        res.status(201).json({ message: 'Product created successfully!', product: newProduct });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error creating product:', error);
+        res.status(500).json({ message: 'Error creating product' });
     }
 };
 

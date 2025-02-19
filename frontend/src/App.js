@@ -1,20 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
-import 'boxicons/css/boxicons.min.css';
-// import AdminPage from "./compenent/adminAage";
-import ProductForm from './compenent/ProductForm';
-// import ProductForm from './compenent/ProductForm';
-import ProductList from './compenent/ProductList';
-function App() {
-  return (
-    <div className=" bg-no-repeat  bg-gradient-to-b from-black to-red-600 App">
-      <ProductForm />
-      {/* <AdminPage /> */}
-      <ProductList />
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import ProductForm from "./components/ProductForm";
+import ProductList from "./components/ProductList";
 
-      {/* <h1>hhhhhhhhhhhhhhhhhhhhhhhhh</h1> */}
-    </div>
-  );
+function App() {
+    return (
+        <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/add-product" element={<ProductForm />} />
+            <Route path="/products" element={<ProductList />} />
+        </Routes>
+    );
 }
 
 export default App;
