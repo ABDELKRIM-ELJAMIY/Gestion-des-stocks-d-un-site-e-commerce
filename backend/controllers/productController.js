@@ -1,9 +1,9 @@
 const Product = require('../models/productModel'); 
+// or
 
-// Fonction pour créer un produit
 const createProduct = async (req, res) => {
     const { title, description, price, stock } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : ""; // Save the path of the uploaded image
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : ""; 
 
     try {
         const newProduct = new Product({
@@ -11,7 +11,7 @@ const createProduct = async (req, res) => {
             description,
             price,
             stock,
-            imageUrl, // Store the image path in the database
+            imageUrl, 
         });
 
         await newProduct.save();
@@ -22,7 +22,7 @@ const createProduct = async (req, res) => {
     }
 };
 
-// Fonction pour récupérer tous les produits
+
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find();
@@ -32,27 +32,34 @@ const getAllProducts = async (req, res) => {
     }
 };
 
-// Fonction pour mettre à jour un produit
+
 const updateProduct = async (req, res) => {
     try {
-        const { title, description, price, stock, imageUrl } = req.body;
+        const { title, description, price, stock } = req.body;
+        let imageUrl = req.body.imageUrl; 
+
+        if (req.file) {
+            imageUrl = `/uploads/${req.file.filename}`; 
+        }
+
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
-            { title, description, price, stock, imageUrl, updatedAt: Date.now() },
+            { title, description, price, stock, image: imageUrl, updatedAt: Date.now() },
             { new: true }
         );
 
         if (!updatedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).json({ message: "Product not found" });
         }
 
         res.status(200).json(updatedProduct);
     } catch (error) {
+        console.error("Error updating product:", error);
         res.status(500).json({ message: error.message });
     }
 };
 
-// Fonction pour supprimer un produit
+
 const deleteProduct = async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);

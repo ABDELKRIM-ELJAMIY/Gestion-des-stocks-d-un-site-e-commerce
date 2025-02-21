@@ -2,33 +2,31 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const multer = require('multer'); // Import multer for file uploads
+const multer = require('multer'); 
 const path = require('path');
 const productController = require('./controllers/productController');
-
+// origin
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-// CORS setup to allow frontend to make requests
 app.use(cors());
 
-// Set up Multer storage configuration
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads'); // Save uploaded files to the 'uploads' folder
+        cb(null, 'uploads'); 
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Use unique filenames to avoid collisions
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); 
     }
 });
 
-const upload = multer({ storage: storage }); // Create an upload instance using the storage configuration
+const upload = multer({ storage: storage });
 
 // Routes
-app.post('/api/product', upload.single('image'), productController.createProduct); // Use Multer to handle file upload
+app.post('/api/product', upload.single('image'), productController.createProduct); 
 app.get('/api/products', productController.getAllProducts);
 app.put('/api/product/:id', productController.updateProduct);
 app.delete('/api/products/:id', productController.deleteProduct);

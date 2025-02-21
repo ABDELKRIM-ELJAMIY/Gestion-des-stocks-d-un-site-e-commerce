@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-
+// or
 const productSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true, 
+        required: false, 
     },
     createdAt: {
         type: Date,
