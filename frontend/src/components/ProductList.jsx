@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import ProductForm from "./ProductForm";
+import React, { useState, useEffect } from 'react';
+import ProductForm from './ProductForm';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [productToEdit, setProductToEdit] = useState(null);
 
-  
     const fetchProducts = async () => {
         try {
             const res = await fetch("http://localhost:8080/api/products");
@@ -17,10 +16,9 @@ const ProductList = () => {
     };
 
     useEffect(() => {
-        fetchProducts(); 
+        fetchProducts();
     }, []);
 
-    
     const handleDelete = async (id) => {
         try {
             const res = await fetch(`http://localhost:8080/api/products/${id}`, {
@@ -38,50 +36,54 @@ const ProductList = () => {
     };
 
     const handleEdit = (product) => {
-        setProductToEdit(product); 
+        setProductToEdit(product);
     };
 
     return (
-        <div className="max-w-4xl mx-auto mt-6">
-            <h2 className="text-2xl font-bold mb-4 text-center">Product List</h2>
-
-           
+        <div className="max-w-4xl mx-auto mt-10 bg-black text-white">
             <ProductForm onAddProduct={fetchProducts} productToEdit={productToEdit} />
+            <h2 className="text-3xl font-bold text-center mb-6 text-white-600 pt-4 pb-4">
+                Product List
+            </h2>
 
-            
-            <div className="space-y-4 mt-6">
+            <div className="space-y-6">
                 {products.length > 0 ? (
                     products.map((product) => (
-                        <div key={product._id} className="border p-4 rounded-lg shadow-md flex items-center space-x-4">
+                        <div
+                            key={product._id}
+                            className="p-5 rounded-xl shadow-md flex items-center space-x-6 hover:shadow-lg transition duration-300 bg-transparent border border-white"
+                        >
                             <img
                                 src={`http://localhost:8080${product.imageUrl}`}
                                 alt={product.title}
-                                className="w-24 h-24 object-cover rounded"
+                                className="w-28 h-28 object-cover rounded-lg border border-gray-300"
                             />
                             <div className="flex-1">
-                                <h3 className="text-lg font-bold">{product.title}</h3>
-                                <p className="text-gray-600">{product.description}</p>
-                                <p className="text-green-500 font-bold">${product.price}</p>
-                                <p className="text-gray-500">Stock: {product.stock}</p>
+                                <h3 className="text-xl font-semibold text-gray-200">{product.title}</h3>
+                                <p className="mt-1 text-gray-400">{product.description}</p>
+                                <p className="font-bold text-lg mt-2 text-green-500">{product.price}Dh</p>
+                                <p className="mt-1 text-gray-300">Stock: {product.stock}</p>
                             </div>
-                            <div className="flex space-x-2">
+                            <div className="flex space-x-3">
                                 <button
-                                    onClick={() => handleEdit(product)} 
-                                    className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                                    onClick={() => handleEdit(product)}
+                                    className="px-5 py-2 rounded-lg bg-blue-500 text-white flex items-center space-x-2 hover:bg-blue-600 transition"
                                 >
-                                    Modify
+                                    <i className="bx bx-edit-alt"></i>
+                                    <span>Edit</span>
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(product._id)} 
-                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                    onClick={() => handleDelete(product._id)}
+                                    className="px-5 py-2 rounded-lg bg-red-500 text-white flex items-center space-x-2 hover:bg-red-600 transition"
                                 >
-                                    Delete
+                                    <i className="bx bxs-trash" style={{ color: '#ffffff' }}></i>
+                                    <span>Delete</span>
                                 </button>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <p className="text-center text-gray-500">No products available</p>
+                    <p className="text-center text-lg text-gray-500">No products available</p>
                 )}
             </div>
         </div>

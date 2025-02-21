@@ -36,10 +36,10 @@ const getAllProducts = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { title, description, price, stock } = req.body;
-        let imageUrl = req.body.imageUrl; 
+        let imageUrl = req.body.imageUrl;
 
         if (req.file) {
-            imageUrl = `/uploads/${req.file.filename}`; 
+            imageUrl = `/uploads/${req.file.filename}`;
         }
 
         const updatedProduct = await Product.findByIdAndUpdate(
@@ -52,12 +52,16 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ message: "Product not found" });
         }
 
+        // Save the updated product explicitly
+        await updatedProduct.save();
+
         res.status(200).json(updatedProduct);
     } catch (error) {
         console.error("Error updating product:", error);
         res.status(500).json({ message: error.message });
     }
 };
+
 
 
 const deleteProduct = async (req, res) => {
